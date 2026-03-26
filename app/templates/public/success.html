@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Briefing enviado</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body class="theme-dark centered-body">
+  <div class="success-card">
+    <span class="badge-glow">Recebido com sucesso</span>
+    <h1>Briefing enviado ✨</h1>
+    <p>Obrigado, <strong>{{ briefing.contact_name }}</strong>. Seu briefing da marca <strong>{{ briefing.brand_name }}</strong> já está no painel para análise.</p>
+    <a href="{{ url_for('public.index') }}" class="btn btn-primary full-width">Enviar outro briefing</a>
+  </div>
+</body>
+</html>

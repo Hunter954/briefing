@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ briefing.brand_name }} • Briefing</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body class="admin-body">
+  <header class="admin-topbar">
+    <div>
+      <span class="eyebrow">Detalhes do briefing</span>
+      <h1>{{ briefing.brand_name }}</h1>
+    </div>
+    <div class="admin-actions-inline">
+      <a href="{{ url_for('admin.dashboard') }}" class="btn btn-ghost">Voltar</a>
+      <a href="{{ url_for('admin.logout') }}" class="btn btn-ghost">Sair</a>
+    </div>
+  </header>
+
+  <main class="admin-wrap detail-grid">
+    <section class="detail-card">
+      <h2>Contato</h2>
+      <div class="detail-list">
+        <div><strong>Nome:</strong> {{ briefing.contact_name }}</div>
+        <div><strong>WhatsApp:</strong> {{ briefing.contact_whatsapp }}</div>
+        <div><strong>E-mail:</strong> {{ briefing.contact_email or '—' }}</div>
+        <div><strong>Enviado em:</strong> {{ briefing.created_at.strftime('%d/%m/%Y %H:%M') }}</div>
+      </div>
+    </section>
+
+    <section class="detail-card">
+      <h2>Resumo da marca</h2>
+      <div class="detail-list">
+        <div><strong>Nome da marca:</strong> {{ briefing.brand_name }}</div>
+        <div><strong>Slogan:</strong> {{ briefing.slogan_status or '—' }}</div>
+        <div><strong>Texto do slogan:</strong> {{ briefing.slogan_text or '—' }}</div>
+        <div><strong>Segmento:</strong> {{ briefing.business_segment or '—' }}</div>
+        <div><strong>Descrição:</strong> {{ briefing.business_description or '—' }}</div>
+        <div><strong>Estágio:</strong> {{ briefing.brand_stage or '—' }}</div>
+        <div><strong>Cidade / região:</strong> {{ briefing.city_region or '—' }}</div>
+      </div>
+    </section>
+
+    <section class="detail-card full-span">
+      <h2>Respostas de múltipla escolha</h2>
+      <div class="tag-sections">
+        {% for category, values in grouped_options.items() %}
+          <article class="tag-section">
+            <h3>{{ category|replace('_', ' ')|title }}</h3>
+            <div class="tag-list">
+              {% for value in values %}
+                <span class="admin-tag">{{ value }}</span>
+              {% endfor %}
+            </div>
+          </article>
+        {% else %}
+          <p>Sem seleções múltiplas registradas.</p>
+        {% endfor %}
+      </div>
+    </section>
+
+    <section class="detail-card">
+      <h2>Direção visual</h2>
+      <div class="detail-list">
+        <div><strong>Cores desejadas:</strong> {{ briefing.colors_wanted or '—' }}</div>
+        <div><strong>Cores evitadas:</strong> {{ briefing.colors_avoided or '—' }}</div>
+        <div><strong>Tipo de logo:</strong> {{ briefing.logo_type or '—' }}</div>
+        <div><strong>Símbolo desejado:</strong> {{ briefing.desired_symbol or '—' }}</div>
+        <div><strong>Detalhes do símbolo:</strong> {{ briefing.desired_symbol_details or '—' }}</div>
+        <div><strong>Evitar:</strong> {{ briefing.avoid_elements or '—' }}</div>
+      </div>
+    </section>
+
+    <section class="detail-card">
+      <h2>Prazo e entrega</h2>
+      <div class="detail-list">
+        <div><strong>Prazo:</strong> {{ briefing.deadline or '—' }}</div>
+        <div><strong>Escopo:</strong> {{ briefing.service_scope or '—' }}</div>
+        <div><strong>Fundos:</strong> {{ briefing.background_preference or '—' }}</div>
+        <div><strong>Observações:</strong> {{ briefing.final_notes or '—' }}</div>
+      </div>
+    </section>
+
+    <section class="detail-card full-span">
+      <h2>Referências</h2>
+      <div class="detail-list mb-20">
+        <div><strong>Gostou de:</strong> {{ briefing.references_liked_text or '—' }}</div>
+        <div><strong>Não gostou de:</strong> {{ briefing.references_disliked_text or '—' }}</div>
+        <div><strong>Público detalhado:</strong> {{ briefing.audience_details or '—' }}</div>
+        <div><strong>Objetivo detalhado:</strong> {{ briefing.goal or '—' }}</div>
+        <div><strong>Sensação desejada:</strong> {{ briefing.desired_feeling or '—' }}</div>
+      </div>
+
+      {% if briefing.images %}
+      <div class="image-grid">
+        {% for image in briefing.images %}
+          <a href="{{ url_for('admin.upload_file', relative_path=image.relative_path) }}" target="_blank" class="image-card">
+            <img src="{{ url_for('admin.upload_file', relative_path=image.relative_path) }}" alt="{{ image.original_name }}">
+            <span>{{ image.original_name }}</span>
+          </a>
+        {% endfor %}
+      </div>
+      {% else %}
+      <p>Nenhuma imagem enviada.</p>
+      {% endif %}
+    </section>
+  </main>
+</body>
+</html>

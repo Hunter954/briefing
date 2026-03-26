@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Briefing de Logomarca</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body class="theme-dark">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+
+  <main class="mobile-shell">
+    <section class="hero-card reveal">
+      <span class="eyebrow">Agência • Branding • Mobile First</span>
+      <h1>Briefing criativo para <span>logomarca</span></h1>
+      <p>Responda em poucos passos. Quanto mais detalhes, mais forte e certeira fica a identidade da sua marca.</p>
+
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          <div class="flash-stack">
+            {% for category, message in messages %}
+              <div class="flash flash-{{ category }}">{{ message }}</div>
+            {% endfor %}
+          </div>
+        {% endif %}
+      {% endwith %}
+    </section>
+
+    <form action="{{ url_for('public.submit_briefing') }}" method="POST" enctype="multipart/form-data" id="briefingForm">
+      <div class="progress-card reveal">
+        <div class="progress-top">
+          <span id="stepLabel">Etapa 1 de 5</span>
+          <span id="stepPercent">20%</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+      </div>
+
+      <section class="step-card step is-active reveal" data-step="1">
+        <div class="step-header">
+          <span class="step-kicker">Etapa 1</span>
+          <h2>Informações básicas</h2>
+          <p>Vamos entender o nome da marca, o momento atual e o segmento do negócio.</p>
+        </div>
+
+        <div class="field-group">
+          <label for="brand_name">1. Qual é o nome da marca? <strong>*</strong></label>
+          <input type="text" id="brand_name" name="brand_name" placeholder="Ex: Frame Audiovisual" required>
+        </div>
+
+        <div class="field-group">
+          <label>2. A marca tem slogan?</label>
+          <div class="choice-grid single-choice">
+            {% for item in option_groups.slogan_status %}
+            <label class="choice-pill">
+              <input type="radio" name="slogan_status" value="{{ item }}" {% if loop.first %}checked{% endif %}>
+              <span>{{ item }}</span>
+            </label>
+            {% endfor %}
+          </div>
+          <input type="text" name="slogan_text" placeholder="Digite o slogan, se já tiver" class="mt-12">
+        </div>
+
+        <div class="field-group">
+          <label>3. O que sua empresa faz?</label>
+          <div class="choice-grid single-choice">
+            {% for item in option_groups.business_segment %}
+            <label class="choice-pill">
+              <input type="radio" name="business_segment" value="{{ item }}" {% if loop.first %}checked{% endif %}>
+              <span>{{ item }}</span>
+            </label>
+            {% endfor %}
+          </div>
+          <textarea name="business_description" rows="4" placeholder="Explique rapidamente o que a empresa faz"></textarea>
+        </div>
+
+        <div class="field-group">
+          <label>4. Qual é o principal objetivo da marca?</label>
+          <div class="choice-grid multi-choice">
+            {% for item in option_groups.goal %}
+            <label class="choice-pill">
+              <input type="checkbox" name="goal" value="{{ item }}">
+              <span>{{ item }}</span>
+            </label>
+            {% endfor %}
+          </div>
+          <textarea name="goal_text" rows="3" placeholder="Se quiser, complemente com mais contexto"></textarea>
+        </div>
+
+        <div class="field-group">
+          <label>5. A marca já existe ou está começando agora?</label>
+          <div class="choice-grid single-choice">
+            {% for item in option_groups.brand_stage %}
+            <label class="choice-pill">
+              <input type="radio" name="brand_stage" value="{{ item }}" {% if loop.first %}checked{% endif %}>
+              <span>{{ item }}</span>
+            </label>
+            {% endfor %}
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label for="city_region">6. Em qual cidade ou região a marca atua?</label>
+          <input type="text" id="city_region" name="city_region" placeholder="Ex: Foz do Iguaçu - PR">
+        </div>
+      </section>
+
+      <section class="step-card step" data-step="2">
+        <div class="step-header">
+          <span class="step-kicker">Etapa 2</span>
+          <h2>Posicionamento</h2>
+          <p>Agora vamos alinhar público, percepção e valores da marca.</p>
+        </div>
+
+        <div class="field-group">
+          <label>7. Quem é o público-alvo da marca?</label>
+          <div class="choice-grid multi-choice">
+            {% for item in option_groups.audience %}
+            <label class="choice-pill">
+              <input type="checkbox" name="audience" value="{{ item }}">
+              <span>{{ item }}</span>
+            </label>
+            {% endfor %}
+          </div>
+          <textarea name="audience_details" rows="3" placeholder="Descreva melhor seu público"></textarea>
+        </div>
+
+        <div class="field-group">
+          <label>8. Quais valores a marca quer transmitir?</label>
+          <div class="choice-grid multi-choice">
+            {% for item in option_groups['values'] %}
+            <label class="choice-pill">
+              <input type="checkbox" name="values" value="{{ item }}">
+              <span>{{ item }}</span>
+            </label>
+            {% endfor %}
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label>9. Como você quer que sua marca seja percebida?</label>
+          <div class="choice-grid multi-choice">
+            {% for item in option_groups.perception %}
+            <label class="choice-pill">
+              <input type="checkbox" name="perception" value="{{ item }}">
+              <span>{{ item }}</span>
+            </label>
+            {% endfor %}
+          </div>
+        </div>
+      </section>
+
+      <section class="step-card step" data-step="3">
+        <div class="step-header">
+          <span class="step-kicker">Etapa 3</span>
+          <h2>Direção visual</h2>
+          <p>Escolha estilos, cores e tipos de logo que combinam com a sua ideia.</p>
+        </div>
+
+        <div class="field-group">
+          <label>10. Existe alguma cor que você gostaria de usar?</label>
+          <div class="choice-grid multi-choice">
+            {% for item in option_groups.colors %}
+            <label class="choice-pill">
+              <input type="checkbox" name="colors" value="{{ item }}">
+              <span>{{ item }}</span>
+            </label>
+            {% endfor %}
+          </div>
+          <input type="text" name="colors_wanted" placeholder="Cores desejadas, se quiser detalhar">
+        </div>
+
+        <div class="field-group">
+          <label for="colors_avoided">11. Existe alguma cor que você não quer usar?</label>
+          <input type="text" id="colors_avoided" name="colors_avoided" placeholder="Ex: Não quero rosa ou amarelo">
+        </div>
+
+        <div class="field-group">
+          <label>12. Qual estilo visual você prefere?</label>
+          <div class="choice-grid multi-choice">
+            {% for item in option_groups.style %}
+            <label class="choice-pill">
+              <input type="checkbox" name="style" value="{{ item }}">
+              <span>{{ item }}</span>
+            </label>
+            {% endfor %}
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label>13. Você prefere qual tipo de logomarca?</label>
+          <div class="choice-grid single-choice">
+            {% for item in option_groups.logo_type %}
+            <label class="choice-pill">
+              <input type="radio" name="logo_type" value="{{ item }}" {% if loop.first %}checked{% endif %}>
+              <span>{{ item }}</span>
+            </label>
+            {% endfor %}
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label>16. Existe algum símbolo, elemento ou ideia que você gostaria de incluir?</label>
+          <div class="choice-grid single-choice">
+            {% for item in option_groups.desired_symbol %}
+            <label class="choice-pill">
+              <input type="radio" name="desired_symbol" value="{{ item }}" {% if loop.first %}checked{% endif %}>
+              <span>{{ item }}</span>
+            </label>
+            {% endfor %}
+          </div>
+          <textarea name="desired_symbol_details" rows="3" placeholder="Qual símbolo ou ideia?"></textarea>
+        </div>
+
+        <div class="field-group">
+          <label for="avoid_elements">17. Existe algo que não deve aparecer de jeito nenhum?</label>
+          <textarea id="avoid_elements" name="avoid_elements" rows="3" placeholder="Ex: não quero algo infantil, poluído ou clichê"></textarea>
+        </div>
+      </section>
+
+      <section class="step-card step" data-step="4">
+        <div class="step-header">
+          <span class="step-kicker">Etapa 4</span>
+          <h2>Referências e aplicação</h2>
+          <p>Aqui entram as referências, os usos da marca e o que você quer sentir ao ver o resultado.</p>
+        </div>
+
+        <div class="field-group">
+          <label>14. Tem alguma referência de marcas que você gosta?</label>
+          <div class="inline-note">Você pode escrever e também enviar várias imagens de referência.</div>
+          <textarea name="references_liked_text" rows="3" placeholder="Digite marcas que você gosta ou descreva a referência"></textarea>
+          <label class="upload-box mt-12" for="reference_images">
+            <input type="file" id="reference_images" name="reference_images" accept="image/*" multiple>
+            <div>
+              <strong>Toque para enviar imagens</strong>
+              <span>PNG, JPG, WEBP, GIF • várias imagens permitidas</span>
+            </div>
+          </label>
+          <div id="filePreview" class="file-preview"></div>
+        </div>
+
+        <div class="field-group">
+          <label for="references_disliked_text">15. Tem alguma referência de marcas que você não gosta?</label>
+          <textarea id="references_disliked_text" name="references_disliked_text" rows="3" placeholder="Ex: não gosto de logos muito infantis ou poluídos"></textarea>
+        </div>
+
+        <div class="field-group">
+          <label>18. Onde a logomarca será mais usada?</label>
+          <div class="choice-grid multi-choice">
+            {% for item in option_groups.usage %}
+            <label class="choice-pill">
+              <input type="checkbox" name="usage" value="{{ item }}">
+              <span>{{ item }}</span>
+            </label>
+            {% endfor %}
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label>19. Você precisa que a logo funcione bem em fundo escuro e claro?</label>
+          <div class="choice-grid single-choice">
+            {% for item in option_groups.background_preference %}
+            <label class="choice-pill">
+              <input type="radio" name="background_preference" value="{{ item }}" {% if loop.first %}checked{% endif %}>
+              <span>{{ item }}</span>
+            </label>
+            {% endfor %}
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label>20. Qual sensação a pessoa deve ter ao ver sua marca?</label>
+          <div class="choice-grid multi-choice">
+            {% for item in option_groups.feelings %}
+            <label class="choice-pill">
+              <input type="checkbox" name="feelings" value="{{ item }}">
+              <span>{{ item }}</span>
+            </label>
+            {% endfor %}
+          </div>
+          <textarea name="desired_feeling_text" rows="3" placeholder="Se quiser, complemente aqui"></textarea>
+        </div>
+      </section>
+
+      <section class="step-card step" data-step="5">
+        <div class="step-header">
+          <span class="step-kicker">Etapa 5</span>
+          <h2>Prazo e contato</h2>
+          <p>Última etapa para finalizar o briefing e enviar tudo certinho.</p>
+        </div>
+
+        <div class="field-group">
+          <label>21. Existe prazo para o projeto?</label>
+          <div class="choice-grid single-choice">
+            {% for item in option_groups.deadline %}
+            <label class="choice-pill">
+              <input type="radio" name="deadline" value="{{ item }}" {% if loop.first %}checked{% endif %}>
+              <span>{{ item }}</span>
+            </label>
+            {% endfor %}
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label>22. Deseja apenas a logomarca ou também identidade visual?</label>
+          <div class="choice-grid single-choice">
+            {% for item in option_groups.service_scope %}
+            <label class="choice-pill">
+              <input type="radio" name="service_scope" value="{{ item }}" {% if loop.first %}checked{% endif %}>
+              <span>{{ item }}</span>
+            </label>
+            {% endfor %}
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label for="final_notes">23. Quer deixar alguma observação final?</label>
+          <textarea id="final_notes" name="final_notes" rows="4" placeholder="Escreva aqui qualquer detalhe importante"></textarea>
+        </div>
+
+        <div class="field-group contact-grid">
+          <div>
+            <label for="contact_name">Seu nome <strong>*</strong></label>
+            <input type="text" id="contact_name" name="contact_name" placeholder="Ex: Kevin Premoli" required>
+          </div>
+          <div>
+            <label for="contact_whatsapp">WhatsApp <strong>*</strong></label>
+            <input type="text" id="contact_whatsapp" name="contact_whatsapp" placeholder="Ex: 5545999999999" required>
+          </div>
+          <div>
+            <label for="contact_email">E-mail</label>
+            <input type="email" id="contact_email" name="contact_email" placeholder="voce@empresa.com">
+          </div>
+        </div>
+      </section>
+
+      <div class="sticky-actions reveal">
+        <button type="button" class="btn btn-ghost" id="prevBtn">Voltar</button>
+        <button type="button" class="btn btn-primary" id="nextBtn">Continuar</button>
+        <button type="submit" class="btn btn-primary hidden" id="submitBtn">Enviar briefing</button>
+      </div>
+    </form>
+  </main>
+
+  <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
