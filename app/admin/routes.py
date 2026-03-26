@@ -22,39 +22,9 @@ CATEGORY_LABELS = {
 
 def get_grouped_options(briefing):
     grouped = {}
-    for option in briefing.options:
+    for option in (briefing.options or []):
         grouped.setdefault(option.category, []).append(option.value)
-
-    ordered_categories = [
-        "goal",
-        "audience",
-        "values",
-        "perception",
-        "colors",
-        "style",
-        "usage",
-        "feelings",
-    ]
-
-    groups = []
-    for category in ordered_categories:
-        values = grouped.get(category)
-        if values:
-            groups.append({
-                "key": category,
-                "label": CATEGORY_LABELS.get(category, category.replace("_", " ").title()),
-                "values": values,
-            })
-
-    for category, values in grouped.items():
-        if category not in ordered_categories:
-            groups.append({
-                "key": category,
-                "label": CATEGORY_LABELS.get(category, category.replace("_", " ").title()),
-                "values": values,
-            })
-
-    return groups
+    return grouped
 
 
 @admin_bp.route("/login", methods=["GET", "POST"])
@@ -117,7 +87,12 @@ def dashboard():
 def briefing_detail(briefing_id):
     briefing = Briefing.query.get_or_404(briefing_id)
     grouped_options = get_grouped_options(briefing)
-    return render_template("admin/briefing_detail.html", briefing=briefing, grouped_options=grouped_options)
+    return render_template(
+        "admin/briefing_detail.html",
+        briefing=briefing,
+        grouped_options=grouped_options,
+        category_labels=CATEGORY_LABELS,
+    )
 
 
 @admin_bp.route("/uploads/<path:relative_path>")

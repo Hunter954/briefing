@@ -48,11 +48,11 @@
     <section class="detail-card full-span">
       <h2>Respostas de múltipla escolha</h2>
       <div class="tag-sections">
-        {% for group in grouped_options %}
+        {% for category, values in grouped_options.items() %}
           <article class="tag-section">
-            <h3>{{ group.label }}</h3>
+            <h3>{{ category_labels.get(category, category|replace('_', ' ')|title) }}</h3>
             <div class="tag-list">
-              {% for value in group.values %}
+              {% for value in values %}
                 <span class="admin-tag">{{ value }}</span>
               {% endfor %}
             </div>
