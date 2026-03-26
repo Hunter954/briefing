@@ -184,6 +184,17 @@ input::placeholder, textarea::placeholder { color: #8d91a1; }
   z-index: 30;
 }
 
+
+.sticky-actions.is-first-step #nextBtn,
+.sticky-actions.is-last-step #submitBtn {
+  grid-column: 1 / -1;
+}
+
+.sticky-actions.is-first-step #prevBtn,
+.sticky-actions.is-last-step #nextBtn {
+  display: none;
+}
+
 .btn {
   border: 0;
   border-radius: 18px;

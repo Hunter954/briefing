@@ -24,9 +24,19 @@ document.addEventListener('DOMContentLoaded', () => {
     stepLabel.textContent = `Etapa ${currentStep + 1} de ${totalSteps}`;
     stepPercent.textContent = `${percent}%`;
 
-    prevBtn.style.visibility = currentStep === 0 ? 'hidden' : 'visible';
-    nextBtn.classList.toggle('hidden', currentStep === totalSteps - 1);
-    submitBtn.classList.toggle('hidden', currentStep !== totalSteps - 1);
+    const isFirstStep = currentStep === 0;
+    const isLastStep = currentStep === totalSteps - 1;
+
+    prevBtn.style.visibility = isFirstStep ? 'hidden' : 'visible';
+    nextBtn.classList.toggle('hidden', isLastStep);
+    submitBtn.classList.toggle('hidden', !isLastStep);
+
+    const stickyActions = document.querySelector('.sticky-actions');
+    if (stickyActions) {
+      stickyActions.classList.toggle('is-first-step', isFirstStep);
+      stickyActions.classList.toggle('is-last-step', isLastStep);
+    }
+
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
