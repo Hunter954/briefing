@@ -8,11 +8,53 @@ from app.models import Briefing, User
 admin_bp = Blueprint("admin", __name__, url_prefix="/admin")
 
 
+CATEGORY_LABELS = {
+    "goal": "Objetivos principais",
+    "audience": "Público-alvo",
+    "values": "Valores da marca",
+    "perception": "Como a marca deve ser percebida",
+    "colors": "Cores desejadas",
+    "style": "Estilo visual",
+    "usage": "Onde a logomarca será usada",
+    "feelings": "Sensações que a marca deve transmitir",
+}
+
+
 def get_grouped_options(briefing):
     grouped = {}
     for option in briefing.options:
         grouped.setdefault(option.category, []).append(option.value)
-    return grouped
+
+    ordered_categories = [
+        "goal",
+        "audience",
+        "values",
+        "perception",
+        "colors",
+        "style",
+        "usage",
+        "feelings",
+    ]
+
+    groups = []
+    for category in ordered_categories:
+        values = grouped.get(category)
+        if values:
+            groups.append({
+                "key": category,
+                "label": CATEGORY_LABELS.get(category, category.replace("_", " ").title()),
+                "values": values,
+            })
+
+    for category, values in grouped.items():
+        if category not in ordered_categories:
+            groups.append({
+                "key": category,
+                "label": CATEGORY_LABELS.get(category, category.replace("_", " ").title()),
+                "values": values,
+            })
+
+    return groups
 
 
 @admin_bp.route("/login", methods=["GET", "POST"])
